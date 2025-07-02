@@ -9,13 +9,117 @@ import Navigation from "@/components/Navigation";
 const Index = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    setShowLogin(false);
+    setShowDashboard(true);
+  };
 
   if (showLogin && !isLoggedIn) {
     return (
-      <LoginForm
-        onLogin={() => setIsLoggedIn(true)}
-        onBack={() => setShowLogin(false)}
-      />
+      <LoginForm onLogin={handleLogin} onBack={() => setShowLogin(false)} />
+    );
+  }
+
+  if (showDashboard && isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation
+          isLoggedIn={isLoggedIn}
+          onLogin={() => setShowLogin(true)}
+        />
+
+        <main className="container mx-auto px-6 py-12">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Личный кабинет
+            </h1>
+            <p className="text-gray-600">
+              Управляйте своими проектами и настройками
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <Icon
+                    name="FolderPlus"
+                    size={20}
+                    className="text-purple-600"
+                  />
+                  Мои проекты
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Создавайте и управляйте проектами суммаризации
+                </p>
+                <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                  Создать проект
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <Icon
+                    name="MessageSquare"
+                    size={20}
+                    className="text-blue-600"
+                  />
+                  Telegram чаты
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Подключенные чаты для обработки
+                </p>
+                <Button variant="outline" size="sm">
+                  Настроить
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <Icon name="User" size={20} className="text-green-600" />
+                  Профиль
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Настройки аккаунта и безопасность
+                </p>
+                <Button variant="outline" size="sm">
+                  Редактировать
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex gap-4">
+            <Button variant="outline" onClick={() => setShowDashboard(false)}>
+              <Icon name="ArrowLeft" size={16} className="mr-2" />
+              На главную
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsLoggedIn(false);
+                setShowDashboard(false);
+              }}
+            >
+              <Icon name="LogOut" size={16} className="mr-2" />
+              Выйти
+            </Button>
+          </div>
+        </main>
+      </div>
     );
   }
 
@@ -130,7 +234,11 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">Вы успешно вошли в систему</p>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowDashboard(true)}
+                >
                   Перейти в личный кабинет
                   <Icon name="ArrowRight" size={16} className="ml-2" />
                 </Button>
